@@ -1,19 +1,196 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+
+<html lang="bn">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Our Love Timer 💞</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Our Cute Timer 💕</title>
   <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      background-color: #ffc4e1; /* Pink theme */
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Poppins', sans-serif;
+    :root{
+      --bg:#ffeef6;
+      --accent:#ff6fa3;
+      --muted:#ffeff6;
+      --card:#fff;
+      --shadow: 0 10px 30px rgba(255,111,147,0.12);
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:#333}header{padding:40px 20px;text-align:center}
+.title{font-size:28px;color:var(--accent);letter-spacing:0.6px}
+.subtitle{margin-top:6px;color:#b24a73}
+
+.timer-wrap{max-width:900px;margin:20px auto;padding:28px;border-radius:18px;background:linear-gradient(180deg,var(--card),#fff);box-shadow:var(--shadow);position:relative;overflow:hidden}
+.timer{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.time-item{background:var(--muted);padding:14px 18px;border-radius:12px;min-width:96px;text-align:center}
+.time-item .num{font-weight:700;font-size:22px;color:var(--accent)}
+.time-item .label{font-size:12px;color:#7a3b56;margin-top:6px}
+
+.photos{max-width:900px;margin:26px auto;padding:18px;border-radius:16px;background:rgba(255,255,255,0.9);box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.photo{border-radius:12px;overflow:hidden;position:relative}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+.stickers{max-width:900px;margin:26px auto;padding:18px;border-radius:16px;background:linear-gradient(180deg,#fff, #fffefc);box-shadow:var(--shadow)}
+.sticker-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.sticker{width:96px;height:96px;border-radius:18px;background:linear-gradient(180deg,#fff, #ffe8f0);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.06);transform:translateY(20px);opacity:0}
+.sticker img{width:72px;height:72px}
+.sticker.pop{animation:pop 700ms cubic-bezier(.22,1,.36,1) forwards}
+@keyframes pop{0%{transform:translateY(20px) scale(.9);opacity:0}60%{transform:translateY(-6px) scale(1.05);opacity:1}100%{transform:translateY(0) scale(1)} }
+
+/* bubbles */
+.bubbles{position:fixed;left:0;right:0;bottom:0;top:0;pointer-events:none;z-index:0}
+.bubble{position:absolute;border-radius:50%;opacity:0.9;mix-blend-mode:screen}
+
+/* cute footer */
+footer{padding:28px;text-align:center;color:#8a5674}
+
+/* small screens tweaks */
+@media (max-width:520px){.title{font-size:22px}.time-item{min-width:74px;padding:10px}}
+
+  </style>
+</head>
+<body>
+  <div class="bubbles" id="bubbles"></div>
+  <header>
+    <div class="title">আমাদের কিউট ওয়েবসাইট 💖</div>
+    <div class="subtitle">রিলেশনশিপ টাইমার — শুরু: <strong>23 Oct 2025</strong></div>
+  </header>  <section class="timer-wrap">
+    <div style="text-align:center;margin-bottom:10px;color:#a13e6a">আমাদের কত দিন/ঘণ্টা/মিনিট/সেকেন্ড হয়েছে</div>
+    <div class="timer" id="timer">
+      <div class="time-item"><div class="num" id="years">0</div><div class="label">Years</div></div>
+      <div class="time-item"><div class="num" id="months">0</div><div class="label">Months</div></div>
+      <div class="time-item"><div class="num" id="days">0</div><div class="label">Days</div></div>
+      <div class="time-item"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
+      <div class="time-item"><div class="num" id="minutes">0</div><div class="label">Minutes</div></div>
+      <div class="time-item"><div class="num" id="seconds">0</div><div class="label">Seconds</div></div>
+    </div>
+  </section>  <section class="photos" id="photos">
+    <!-- Replace these srcs with your own photos in /images/ folder -->
+    <div class="photo"><img src="images/photo1.jpg" alt="photo1"></div>
+    <div class="photo"><img src="images/photo2.jpg" alt="photo2"></div>
+    <div class="photo"><img src="images/photo3.jpg" alt="photo3"></div>
+    <div class="photo"><img src="images/photo4.jpg" alt="photo4"></div>
+  </section>  <section class="stickers">
+    <h3 style="text-align:center;color:#ba4a78">Hello Kitty Stickers (scroll to reveal)</h3>
+    <div class="sticker-row" id="stickerRow">
+      <div class="sticker"><img src="images/hello-kitty-1.png" alt="hk1"></div>
+      <div class="sticker"><img src="images/hello-kitty-2.png" alt="hk2"></div>
+      <div class="sticker"><img src="images/hello-kitty-3.png" alt="hk3"></div>
+      <div class="sticker"><img src="images/hello-kitty-4.png" alt="hk4"></div>
+    </div>
+  </section>  <footer>
+    <div>Made with lots of 💗 — Replace images in the <code>/images/</code> folder</div>
+  </footer>  <script>
+    // --------- TIMER LOGIC ----------
+    const startDate = new Date('2025-10-23T00:00:00'); // relationship start milestone
+    const yearsEl = document.getElementById('years');
+    const monthsEl = document.getElementById('months');
+    const daysEl = document.getElementById('days');
+    const hoursEl = document.getElementById('hours');
+    const minutesEl = document.getElementById('minutes');
+    const secondsEl = document.getElementById('seconds');
+
+    function updateTimer(){
+      const now = new Date();
+      let past = (now - startDate) >= 0; // true if startDate already passed
+
+      if(!past){
+        // show countdown until startDate
+        const diff = startDate - now;
+        const secs = Math.floor(diff/1000)%60;
+        const mins = Math.floor(diff/1000/60)%60;
+        const hrs = Math.floor(diff/1000/60/60)%24;
+        const days = Math.floor(diff/1000/60/60/24);
+        yearsEl.textContent = 0;
+        monthsEl.textContent = 0;
+        daysEl.textContent = days;
+        hoursEl.textContent = hrs;
+        minutesEl.textContent = mins;
+        secondsEl.textContent = secs;
+        return;
+      }
+
+      // calculate years, months, days between two dates roughly
+      let y1 = startDate.getFullYear(), m1 = startDate.getMonth(), d1 = startDate.getDate();
+      let y2 = now.getFullYear(), m2 = now.getMonth(), d2 = now.getDate();
+
+      let years = y2 - y1;
+      let months = m2 - m1;
+      let days = d2 - d1;
+
+      if(days < 0){
+        // borrow days from previous month
+        const prevMonth = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        days += prevMonth;
+        months -= 1;
+      }
+      if(months < 0){ months += 12; years -= 1; }
+
+      // now calculate hours,min,sec for today's partial
+      const startToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const diffToday = now - new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0,0,0);
+      const hours = Math.floor(diffToday/1000/60/60);
+      const minutes = Math.floor(diffToday/1000/60)%60;
+      const seconds = Math.floor(diffToday/1000)%60;
+
+      yearsEl.textContent = years;
+      monthsEl.textContent = months;
+      daysEl.textContent = days;
+      hoursEl.textContent = hours;
+      minutesEl.textContent = minutes;
+      secondsEl.textContent = seconds;
+    }
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+
+    // --------- SCROLL REVEAL FOR STICKERS ----------
+    const stickers = document.querySelectorAll('.sticker');
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach((entry,i)=>{
+        if(entry.isIntersecting){
+          setTimeout(()=> entry.target.classList.add('pop'), i*120);
+        }
+      })
+    },{threshold:0.25});
+    stickers.forEach(s=>obs.observe(s));
+
+    // --------- BUBBLES GENERATOR ----------
+    const bubbleArea = document.getElementById('bubbles');
+    const colors = ['#ffd0ea','#ffe9f4','#ffd9e6','#ffecf6'];
+    function makeBubble(){
+      const b = document.createElement('div');
+      b.className='bubble';
+      const size = Math.random()*80 + 20; // 20 - 100px
+      b.style.width = size + 'px';
+      b.style.height = size + 'px';
+      b.style.left = Math.random()*100 + '%';
+      b.style.bottom = '-10%';
+      b.style.background = colors[Math.floor(Math.random()*colors.length)];
+      b.style.opacity = (Math.random()*0.4 + 0.3).toString();
+      b.style.transform = 'translateY(0)';
+      bubbleArea.appendChild(b);
+
+      const riseTime = Math.random()*8000 + 6000; // 6s - 14s
+      b.animate([
+        {transform: 'translateY(0) scale(1)', opacity: b.style.opacity},
+        {transform: 'translateY(-130vh) scale(1.2)', opacity: 0}
+      ],{duration:riseTime, easing:'linear'});
+
+      setTimeout(()=> b.remove(), riseTime+50);
+    }
+    // spawn bubbles often
+    setInterval(()=>{ if(Math.random()>0.3) makeBubble(); }, 500);
+
+    // --------- SIMPLE TOUCH: click photo to open full screen ----------
+    document.getElementById('photos').addEventListener('click', (e)=>{
+      const img = e.target.closest('img');
+      if(!img) return;
+      const w = window.open('');
+      w.document.write('<title>photo</title>');
+      w.document.write('<img src="'+img.src+'" style="width:100%;height:100%;object-fit:contain">');
+    });
+  </script></body>
+  </html>      font-family: 'Poppins', sans-serif;
       color: #fff;
       text-align: center;
     }
