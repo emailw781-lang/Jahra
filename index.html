@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="bn">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Our Cute Timer 💕</title>
+  <style>
+    :root{
+      --bg:#ffeef6;
+      --accent:#ff6fa3;
+      --muted:#ffeff6;
+      --card:#fff;
+      --shadow: 0 10px 30px rgba(255,111,147,0.12);
+      font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,var(--bg),#fff);color:#333}
+    header{padding:40px 20px;text-align:center}
+    .title{font-size:28px;color:var(--accent);letter-spacing:0.6px}
+    .subtitle{margin-top:6px;color:#b24a73}
+    .timer-wrap{max-width:900px;margin:20px auto;padding:28px;border-radius:18px;background:linear-gradient(180deg,var(--card),#fff);box-shadow:var(--shadow);position:relative;overflow:hidden}
+    .timer{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .time-item{background:var(--muted);padding:14px 18px;border-radius:12px;min-width:96px;text-align:center}
+    .time-item .num{font-weight:700;font-size:22px;color:var(--accent)}
+    .time-item .label{font-size:12px;color:#7a3b56;margin-top:6px}
+    .photos{max-width:900px;margin:26px auto;padding:18px;border-radius:16px;background:rgba(255,255,255,0.9);box-shadow:var(--shadow);display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+    .photo{border-radius:12px;overflow:hidden;position:relative}
+    .photo img{width:100%;height:100%;object-fit:cover;display:block}
+    .stickers{max-width:900px;margin:26px auto;padding:18px;border-radius:16px;background:linear-gradient(180deg,#fff, #fffefc);box-shadow:var(--shadow)}
+    .sticker-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+    .sticker{width:96px;height:96px;border-radius:18px;background:linear-gradient(180deg,#fff, #ffe8f0);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(0,0,0,0.06);transform:translateY(20px);opacity:0}
+    .sticker img{width:72px;height:72px}
+    .sticker.pop{animation:pop 700ms cubic-bezier(.22,1,.36,1) forwards}
+    @keyframes pop{0%{transform:translateY(20px) scale(.9);opacity:0}60%{transform:translateY(-6px) scale(1.05);opacity:1}100%{transform:translateY(0) scale(1)} }
+    .bubbles{position:fixed;left:0;right:0;bottom:0;top:0;pointer-events:none;z-index:0}
+    .bubble{position:absolute;border-radius:50%;opacity:0.9;mix-blend-mode:screen}
+    footer{padding:28px;text-align:center;color:#8a5674}
+    @media (max-width:520px){.title{font-size:22px}.time-item{min-width:74px;padding:10px}}
+  </style>
+</head>
+<body>
+  <div class="bubbles" id="bubbles"></div>
+  <header>
+    <div class="title">আমাদের কিউট ওয়েবসাইট 💖</div>
+    <div class="subtitle">রিলেশনশিপ টাইমার — শুরু: <strong>23 Oct 2025</strong></div>
+  </header>
+  <section class="timer-wrap">
+    <div style="text-align:center;margin-bottom:10px;color:#a13e6a">আমাদের কত দিন/ঘণ্টা/মিনিট/সেকেন্ড হয়েছে</div>
+    <div class="timer" id="timer">
+      <div class="time-item"><div class="num" id="years">0</div><div class="label">Years</div></div>
+      <div class="time-item"><div class="num" id="months">0</div><div class="label">Months</div></div>
+      <div class="time-item"><div class="num" id="days">0</div><div class="label">Days</div></div>
+      <div class="time-item"><div class="num" id="hours">0</div><div class="label">Hours</div></div>
+      <div class="time-item"><div class="num" id="minutes">0</div><div class="label">Minutes</div></div>
+      <div class="time-item"><div class="num" id="seconds">0</div><div class="label">Seconds</div></div>
+    </div>
+  </section>
+  <section class="photos" id="photos">
+    <div class="photo"><img src="images/photo1.jpg" alt="photo1"></div>
+    <div class="photo"><img src="images/photo2.jpg" alt="photo2"></div>
+    <div class="photo"><img src="images/photo3.jpg" alt="photo3"></div>
+    <div class="photo"><img src="images/photo4.jpg" alt="photo4"></div>
+  </section>
+  <section class="stickers">
+    <h3 style="text-align:center;color:#ba4a78">Hello Kitty Stickers (scroll to reveal)</h3>
+    <div class="sticker-row" id="stickerRow">
+      <div class="sticker"><img src="images/hello-kitty-1.png" alt="hk1"></div>
+      <div class="sticker"><img src="images/hello-kitty-2.png" alt="hk2"></div>
+      <div class="sticker"><img src="images/hello-kitty-3.png" alt="hk3"></div>
+      <div class="sticker"><img src="images/hello-kitty-4.png" alt="hk4"></div>
+    </div>
+  </section>
+  <footer>
+    <div>Made with lots of 💗 — Replace images in the <code>/images/</code> folder</div>
+  </footer>
+  <script>
+    const startDate = new Date('2025-06-23T00:00:00');
+    const ids = ['years','months','days','hours','minutes','seconds'];
+    const els = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
+    function updateTimer(){
+      const now = new Date(); let diff = now - startDate;
+      if(diff < 0) diff = 0;
+      let seconds = Math.floor(diff / 1000);
+      const years = Math.floor(seconds / (365*24*3600)); seconds -= years*(365*24*3600);
+      const months = Math.floor(seconds / (30*24*3600)); seconds -= months*(30*24*3600);
+      const days = Math.floor(seconds / (24*3600)); seconds -= days*24*3600;
+      const hours = Math.floor(seconds / 3600); seconds -= hours*3600;
+      const minutes = Math.floor(seconds / 60); seconds -= minutes*60;
+      els.years.textContent = years; els.months.textContent = months; els.days.textContent = days; els.hours.textContent = hours; els.minutes.textContent = minutes; els.seconds.textContent = seconds;
+    }
+    setInterval(updateTimer,1000); updateTimer();
+    const stickers = document.querySelectorAll('.sticker');
+    const obs = new IntersectionObserver((entries)=>entries.forEach((e,i)=>{if(e.isIntersecting)setTimeout(()=>e.target.classList.add('pop'),i*120)}),{threshold:0.25});
+    stickers.forEach(s=>obs.observe(s));
+    const bubbleArea = document.getElementById('bubbles');
+    const colors = ['#ffd0ea','#ffe9f4','#ffd9e6','#ffecf6'];
+    function makeBubble(){
+      const b=document.createElement('div');b.className='bubble';const size=Math.random()*80+20;b.style.width=size+'px';b.style.height=size+'px';b.style.left=Math.random()*100+'%';b.style.bottom='-10%';b.style.background=colors[Math.floor(Math.random()*colors.length)];bubbleArea.appendChild(b);
+      const riseTime=Math.random()*8000+6000;b.animate([{transform:'translateY(0)',opacity:1},{transform:'translateY(-130vh)',opacity:0}],{duration:riseTime,easing:'linear'});setTimeout(()=>b.remove(),riseTime+50);
+    }
+    setInterval(()=>{if(Math.random()>0.3)makeBubble();},500);
+  </script>
+</body>
+</html>
